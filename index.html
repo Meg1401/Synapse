@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Synapse — three quick games for your brain</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-512.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="theme-color" content="#0B1220">
+<style>
+  :root {
+    --bg: #F6F4FB;
+    --panel: #FFFFFF;
+    --panel-2: #FBFAFE;
+    --ink: #1B1330;
+    --muted: #6B6480;
+    --border: rgba(27,19,48,0.14);
+    --border-strong: rgba(27,19,48,0.28);
+    --gold: #A9781F;
+    --gold-soft: #F1E3C6;
+    --coral: #B0442E;
+    --coral-soft: #F5DCD4;
+    --teal: #147A63;
+    --teal-soft: #D3EEE6;
+    --node: #2A2148;
+    --node-lit: #E3AE4E;
+    --focus: #6E5BD6;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0B1220;
+      --panel: #131B2E;
+      --panel-2: #172038;
+      --ink: #EAECF3;
+      --muted: #8B93A7;
+      --border: rgba(234,236,243,0.14);
+      --border-strong: rgba(234,236,243,0.30);
+      --gold: #E3AE4E;
+      --gold-soft: rgba(227,174,78,0.16);
+      --coral: #E2694F;
+      --coral-soft: rgba(226,105,79,0.16);
+      --teal: #4FBFA8;
+      --teal-soft: rgba(79,191,168,0.16);
+      --node: #263355;
+      --node-lit: #E3AE4E;
+      --focus: #9C8CF0;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0B1220;
+    --panel: #131B2E;
+    --panel-2: #172038;
+    --ink: #EAECF3;
+    --muted: #8B93A7;
+    --border: rgba(234,236,243,0.14);
+    --border-strong: rgba(234,236,243,0.30);
+    --gold: #E3AE4E;
+    --gold-soft: rgba(227,174,78,0.16);
+    --coral: #E2694F;
+    --coral-soft: rgba(226,105,79,0.16);
+    --teal: #4FBFA8;
+    --teal-soft: rgba(79,191,168,0.16);
+    --node: #263355;
+    --node-lit: #E3AE4E;
+    --focus: #9C8CF0;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', -apple-system, sans-serif;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  }
+
+  .shell {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 4rem;
+  }
+
+  header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+  }
+  .brand-mark {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+  }
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 1.9rem;
+    margin: 0 0 0.15rem;
+    letter-spacing: -0.01em;
+  }
+  .tagline {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.92rem;
+    max-width: 34ch;
+  }
+
+  .totals {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+  .total {
+    text-align: right;
+  }
+  .total .num {
+    font-family: 'Fraunces', serif;
+    font-size: 1.6rem;
+    font-weight: 500;
+    line-height: 1;
+    display: block;
+  }
+  .total .lbl {
+    font-size: 0.72rem;
+    color: var(--muted);
+    display: block;
+    margin-top: 0.3rem;
+  }
+  .profile-link {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    background: none;
+    border: 1px solid var(--border-strong);
+    color: var(--ink);
+    padding: 0.5rem 0.85rem;
+    border-radius: 8px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .profile-link:hover { background: var(--panel-2); }
+
+  .section-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    margin: 2rem 0 0.75rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+  .section-label:first-child { margin-top: 0; padding-top: 0; border-top: none; }
+
+  .profile-note {
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.9rem 1.1rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-bottom: 1.75rem;
+  }
+  .profile-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.9rem 0.1rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .profile-row .pname {
+    flex: 0 0 130px;
+    font-weight: 600;
+    font-size: 0.92rem;
+  }
+  .profile-row .pdomain {
+    flex: 1;
+    color: var(--muted);
+    font-size: 0.82rem;
+  }
+  .profile-row .pval {
+    font-family: 'Fraunces', serif;
+    font-size: 1.15rem;
+    font-weight: 500;
+    text-align: right;
+    min-width: 90px;
+  }
+
+  .keypad {
+    display: grid;
+    grid-template-columns: repeat(3, 64px);
+    gap: 0.6rem;
+    justify-content: center;
+  }
+  .keypad button {
+    width: 64px;
+    height: 52px;
+    border-radius: 9px;
+    border: 1px solid var(--border-strong);
+    background: var(--panel);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .keypad button:hover { background: var(--panel-2); }
+  .entry-display {
+    font-family: 'Fraunces', serif;
+    font-size: 1.6rem;
+    letter-spacing: 0.2em;
+    min-height: 2.2rem;
+    color: var(--muted);
+  }
+  .entry-display.filled { color: var(--ink); }
+
+  .tap-zone {
+    width: 100%;
+    max-width: 420px;
+    height: 220px;
+    border-radius: 14px;
+    border: 1px solid var(--border-strong);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Fraunces', serif;
+    font-size: 1.3rem;
+    cursor: pointer;
+    text-align: center;
+    padding: 1rem;
+    user-select: none;
+  }
+  .tap-zone.wait { background: var(--panel-2); color: var(--muted); }
+  .tap-zone.go { background: var(--teal-soft); color: var(--teal); }
+  .tap-zone.early { background: var(--coral-soft); color: var(--coral); }
+
+  .rule-banner {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--gold);
+    letter-spacing: 0.02em;
+  }
+  .switch-stimulus {
+    font-family: 'Fraunces', serif;
+    font-size: 3rem;
+    font-weight: 600;
+  }
+
+  .hub-list {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--border);
+  }
+  .game-row {
+    display: flex;
+    align-items: center;
+    gap: 1.1rem;
+    width: 100%;
+    padding: 1.15rem 0.25rem;
+    background: none;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+    cursor: pointer;
+    font-family: inherit;
+    color: var(--ink);
+    transition: background 0.15s ease;
+  }
+  .game-row:hover, .game-row:focus-visible {
+    background: var(--panel-2);
+  }
+  .game-row:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: -2px;
+  }
+  .game-glyph {
+    width: 52px;
+    height: 52px;
+    flex-shrink: 0;
+  }
+  .game-info { flex: 1; min-width: 0; }
+  .game-name {
+    font-family: 'Fraunces', serif;
+    font-size: 1.15rem;
+    font-weight: 500;
+    margin: 0 0 0.2rem;
+  }
+  .game-desc {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.88rem;
+  }
+  .game-best {
+    text-align: right;
+    flex-shrink: 0;
+    padding-left: 0.5rem;
+  }
+  .game-best .num {
+    font-size: 1.05rem;
+    font-weight: 600;
+    display: block;
+  }
+  .game-best .lbl {
+    font-size: 0.68rem;
+    color: var(--muted);
+  }
+
+  .view { display: none; }
+  .view.active { display: block; }
+
+  .game-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.75rem;
+    gap: 1rem;
+  }
+  .back-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--ink);
+    font-family: inherit;
+    font-size: 0.85rem;
+    padding: 0.5rem 0.85rem;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  .back-btn:hover { border-color: var(--border-strong); }
+  .live-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1.15rem;
+    font-weight: 500;
+    margin: 0;
+  }
+  .live-score {
+    text-align: right;
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+  .live-score b { color: var(--ink); font-size: 1.1rem; }
+
+  .stage {
+    min-height: 340px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+
+  .timebar-track {
+    width: 100%;
+    max-width: 420px;
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .timebar-fill {
+    height: 100%;
+    background: var(--gold);
+    width: 100%;
+    transform-origin: left;
+  }
+
+  .prompt-word {
+    font-family: 'Fraunces', serif;
+    font-size: 2.4rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .prompt-math {
+    font-family: 'Fraunces', serif;
+    font-size: 2.6rem;
+    font-weight: 500;
+  }
+
+  .choice-row {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .choice-btn {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    padding: 0.85rem 1.4rem;
+    border-radius: 10px;
+    border: 1px solid var(--border-strong);
+    background: var(--panel);
+    color: var(--ink);
+    cursor: pointer;
+    min-width: 84px;
+  }
+  .choice-btn:hover { background: var(--panel-2); }
+  .choice-btn:active { transform: scale(0.97); }
+  .choice-btn.correct { background: var(--teal-soft); border-color: var(--teal); color: var(--teal); }
+  .choice-btn.wrong { background: var(--coral-soft); border-color: var(--coral); color: var(--coral); }
+
+  .swatch-btn {
+    width: 88px;
+    height: 88px;
+    border-radius: 12px;
+    border: 1px solid var(--border-strong);
+    cursor: pointer;
+  }
+  .swatch-row { display: flex; gap: 0.75rem; }
+
+  .end-panel {
+    text-align: center;
+  }
+  .end-panel .headline {
+    font-family: 'Fraunces', serif;
+    font-size: 1.6rem;
+    font-weight: 500;
+    margin: 0 0 0.35rem;
+  }
+  .end-panel .sub {
+    color: var(--muted);
+    font-size: 0.92rem;
+    margin: 0 0 1.5rem;
+  }
+  .end-actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+  }
+  .primary-btn, .ghost-btn {
+    font-family: inherit;
+    font-size: 0.92rem;
+    font-weight: 600;
+    padding: 0.7rem 1.3rem;
+    border-radius: 9px;
+    cursor: pointer;
+  }
+  .primary-btn {
+    background: var(--ink);
+    color: var(--bg);
+    border: 1px solid var(--ink);
+  }
+  .ghost-btn {
+    background: none;
+    border: 1px solid var(--border-strong);
+    color: var(--ink);
+  }
+
+  .hint {
+    color: var(--muted);
+    font-size: 0.85rem;
+    text-align: center;
+    max-width: 30ch;
+  }
+
+  footer {
+    margin-top: 3rem;
+    color: var(--muted);
+    font-size: 0.78rem;
+    text-align: center;
+  }
+
+  @media (max-width: 480px) {
+    h1 { font-size: 1.6rem; }
+    .totals { gap: 1rem; }
+    .prompt-math { font-size: 2rem; }
+    .prompt-word { font-size: 1.9rem; }
+    .swatch-btn { width: 70px; height: 70px; }
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <header>
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="10" cy="10" r="3.2" fill="var(--gold)"/>
+        <circle cx="30" cy="9" r="2.4" fill="var(--coral)"/>
+        <circle cx="32" cy="28" r="3" fill="var(--teal)"/>
+        <circle cx="9" cy="29" r="2.4" fill="var(--gold)"/>
+        <circle cx="20" cy="20" r="3.6" fill="var(--ink)"/>
+        <line x1="10" y1="10" x2="20" y2="20" stroke="var(--border-strong)" stroke-width="1.2"/>
+        <line x1="30" y1="9" x2="20" y2="20" stroke="var(--border-strong)" stroke-width="1.2"/>
+        <line x1="32" y1="28" x2="20" y2="20" stroke="var(--border-strong)" stroke-width="1.2"/>
+        <line x1="9" y1="29" x2="20" y2="20" stroke="var(--border-strong)" stroke-width="1.2"/>
+      </svg>
+      <div>
+        <h1>Synapse</h1>
+        <p class="tagline">Three short games for memory, speed, and focus. Pick one and see how far you get.</p>
+      </div>
+    </div>
+    <div class="totals">
+      <div class="total">
+        <span class="num" id="brainTotal">0</span>
+        <span class="lbl">Brain score</span>
+      </div>
+      <button class="profile-link" id="profileBtn">View profile</button>
+    </div>
+  </header>
+
+  <section class="view active" id="hubView">
+    <p class="section-label">Memory</p>
+    <div class="hub-list">
+      <button class="game-row" data-game="recall">
+        <svg class="game-glyph" viewBox="0 0 52 52" aria-hidden="true">
+          <circle cx="26" cy="10" r="4" fill="var(--gold)"/>
+          <circle cx="10" cy="30" r="4" fill="var(--gold)"/>
+          <circle cx="42" cy="30" r="4" fill="var(--gold)"/>
+          <circle cx="26" cy="44" r="4" fill="var(--gold)"/>
+          <line x1="26" y1="10" x2="10" y2="30" stroke="var(--border-strong)" stroke-width="1.4"/>
+          <line x1="10" y1="30" x2="42" y2="30" stroke="var(--border-strong)" stroke-width="1.4"/>
+          <line x1="42" y1="30" x2="26" y2="44" stroke="var(--border-strong)" stroke-width="1.4"/>
+        </svg>
+        <div class="game-info">
+          <p class="game-name">Recall</p>
+          <p class="game-desc">Watch the path light up, then trace it back. Gets longer each round.</p>
+        </div>
+        <div class="game-best">
+          <span class="num" id="bestRecall">—</span>
+          <span class="lbl">best round</span>
+        </div>
+      </button>
+
+      <button class="game-row" data-game="math">
+        <svg class="game-glyph" viewBox="0 0 52 52" aria-hidden="true">
+          <rect x="8" y="30" width="7" height="14" fill="var(--coral)"/>
+          <rect x="19" y="20" width="7" height="24" fill="var(--coral)"/>
+          <rect x="30" y="10" width="7" height="34" fill="var(--coral)"/>
+          <rect x="41" y="24" width="7" height="20" fill="var(--coral)"/>
+        </svg>
+        <div class="game-info">
+          <p class="game-name">Flash math</p>
+          <p class="game-desc">Quick arithmetic against the clock. Every answer speeds things up.</p>
+        </div>
+        <div class="game-best">
+          <span class="num" id="bestMath">—</span>
+          <span class="lbl">best streak</span>
+        </div>
+      </button>
+
+      <button class="game-row" data-game="focus">
+        <svg class="game-glyph" viewBox="0 0 52 52" aria-hidden="true">
+          <rect x="7" y="7" width="16" height="16" rx="3" fill="var(--teal)"/>
+          <rect x="29" y="7" width="16" height="16" rx="3" fill="var(--gold)"/>
+          <rect x="7" y="29" width="16" height="16" rx="3" fill="var(--coral)"/>
+          <rect x="29" y="29" width="16" height="16" rx="3" fill="var(--node)"/>
+        </svg>
+        <div class="game-info">
+          <p class="game-name">Focus sort</p>
+          <p class="game-desc">Tap the ink colour, not the word. Your instincts will try to trick you.</p>
+        </div>
+        <div class="game-best">
+          <span class="num" id="bestFocus">—</span>
+          <span class="lbl">best streak</span>
+        </div>
+      </button>
+    </div>
+
+    <p class="section-label">Speed and flexibility</p>
+    <div class="hub-list">
+      <button class="game-row" data-game="reaction">
+        <svg class="game-glyph" viewBox="0 0 52 52" aria-hidden="true">
+          <circle cx="26" cy="26" r="18" fill="none" stroke="var(--gold)" stroke-width="3"/>
+          <circle cx="26" cy="26" r="6" fill="var(--gold)"/>
+        </svg>
+        <div class="game-info">
+          <p class="game-name">Reaction</p>
+          <p class="game-desc">Tap the instant it turns. Measured in milliseconds, not points.</p>
+        </div>
+        <div class="game-best">
+          <span class="num" id="bestReaction">—</span>
+          <span class="lbl">best avg (ms)</span>
+        </div>
+      </button>
+
+      <button class="game-row" data-game="span">
+        <svg class="game-glyph" viewBox="0 0 52 52" aria-hidden="true">
+          <rect x="7" y="21" width="9" height="9" fill="var(--teal)"/>
+          <rect x="21" y="21" width="9" height="9" fill="var(--teal)"/>
+          <rect x="35" y="21" width="9" height="9" fill="var(--teal)"/>
+          <path d="M46 26 L38 20 L38 32 Z" fill="var(--muted)"/>
+        </svg>
+        <div class="game-info">
+          <p class="game-name">Digit span</p>
+          <p class="game-desc">See a string of digits, then key them in backwards.</p>
+        </div>
+        <div class="game-best">
+          <span class="num" id="bestSpan">—</span>
+          <span class="lbl">best span</span>
+        </div>
+      </button>
+
+      <button class="game-row" data-game="switch">
+        <svg class="game-glyph" viewBox="0 0 52 52" aria-hidden="true">
+          <path d="M10 18 H36" stroke="var(--coral)" stroke-width="3" fill="none"/>
+          <path d="M30 12 L36 18 L30 24" stroke="var(--coral)" stroke-width="3" fill="none"/>
+          <path d="M42 34 H16" stroke="var(--gold)" stroke-width="3" fill="none"/>
+          <path d="M22 28 L16 34 L22 40" stroke="var(--gold)" stroke-width="3" fill="none"/>
+        </svg>
+        <div class="game-info">
+          <p class="game-name">Switch</p>
+          <p class="game-desc">The rule changes without warning. Judge the letter, or the number, whichever it asks.</p>
+        </div>
+        <div class="game-best">
+          <span class="num" id="bestSwitch">—</span>
+          <span class="lbl">best accuracy</span>
+        </div>
+      </button>
+    </div>
+  </section>
+
+  <section class="view" id="profileView">
+    <div class="game-top">
+      <button class="back-btn" id="profileBackBtn">← Back</button>
+      <h2 class="live-title">Your profile</h2>
+      <div></div>
+    </div>
+    <p class="profile-note">These six games each isolate a different mental skill and score it in a real unit — milliseconds, span length, or accuracy — so you can compare across domains and track your own trend over time. This is a self-tracking tool, not a clinical or scientifically validated assessment. Play each game a few times before reading much into any single number.</p>
+    <div id="profileList"></div>
+  </section>
+
+  <section class="view" id="gameView">
+    <div class="game-top">
+      <button class="back-btn" id="backBtn">← Back</button>
+      <h2 class="live-title" id="liveTitle"></h2>
+      <div class="live-score">Score<br><b id="liveScore">0</b></div>
+    </div>
+    <div class="stage" id="stage"></div>
+  </section>
+
+  <footer>Your best scores stay on this device.</footer>
+</div>
+
+<script>
+(function () {
+  var STORAGE_KEYS = {
+    recall: 'synapse_best_recall', math: 'synapse_best_math', focus: 'synapse_best_focus',
+    reaction: 'synapse_best_reaction', span: 'synapse_best_span', switch: 'synapse_best_switch'
+  };
+  var GAME_NAMES = {
+    recall: 'Recall', math: 'Flash math', focus: 'Focus sort',
+    reaction: 'Reaction', span: 'Digit span', switch: 'Switch'
+  };
+  var LOWER_IS_BETTER = { reaction: true };
+  var PROFILE_META = [
+    { game: 'recall', domain: 'Spatial working memory', unit: '', suffix: ' rounds' },
+    { game: 'span', domain: 'Verbal working memory', unit: '', suffix: ' digits' },
+    { game: 'math', domain: 'Numerical processing speed', unit: '', suffix: ' streak' },
+    { game: 'reaction', domain: 'Raw processing speed', unit: '', suffix: ' ms' },
+    { game: 'focus', domain: 'Inhibitory control', unit: '', suffix: ' streak' },
+    { game: 'switch', domain: 'Cognitive flexibility', unit: '', suffix: '% accuracy' }
+  ];
+
+  function getBest(game) {
+    try {
+      var v = localStorage.getItem(STORAGE_KEYS[game]);
+      return v ? parseInt(v, 10) : 0;
+    } catch (e) { return 0; }
+  }
+  function setBest(game, val) {
+    try { localStorage.setItem(STORAGE_KEYS[game], String(val)); } catch (e) {}
+  }
+  function isNewBest(game, score, best) {
+    if (best === 0) return true;
+    return LOWER_IS_BETTER[game] ? score < best : score > best;
+  }
+  function refreshHub() {
+    var r = getBest('recall'), m = getBest('math'), f = getBest('focus');
+    var rx = getBest('reaction'), sp = getBest('span'), sw = getBest('switch');
+    document.getElementById('bestRecall').textContent = r > 0 ? r : '—';
+    document.getElementById('bestMath').textContent = m > 0 ? m : '—';
+    document.getElementById('bestFocus').textContent = f > 0 ? f : '—';
+    document.getElementById('bestReaction').textContent = rx > 0 ? rx : '—';
+    document.getElementById('bestSpan').textContent = sp > 0 ? sp : '—';
+    document.getElementById('bestSwitch').textContent = sw > 0 ? sw + '%' : '—';
+    document.getElementById('brainTotal').textContent = r + m + f;
+  }
+  function renderProfile() {
+    var list = document.getElementById('profileList');
+    list.innerHTML = '';
+    PROFILE_META.forEach(function (meta) {
+      var val = getBest(meta.game);
+      var row = document.createElement('div');
+      row.className = 'profile-row';
+      row.innerHTML =
+        '<span class="pname">' + GAME_NAMES[meta.game] + '</span>' +
+        '<span class="pdomain">' + meta.domain + '</span>' +
+        '<span class="pval">' + (val > 0 ? val + meta.suffix : 'Not played yet') + '</span>';
+      list.appendChild(row);
+    });
+  }
+
+  var hubView = document.getElementById('hubView');
+  var gameView = document.getElementById('gameView');
+  var profileView = document.getElementById('profileView');
+  var stage = document.getElementById('stage');
+  var liveTitle = document.getElementById('liveTitle');
+  var liveScore = document.getElementById('liveScore');
+  var backBtn = document.getElementById('backBtn');
+  var profileBtn = document.getElementById('profileBtn');
+  var profileBackBtn = document.getElementById('profileBackBtn');
+
+  var activeCleanup = null;
+
+  var STARTERS = {
+    recall: startRecall, math: startMath, focus: startFocus,
+    reaction: startReaction, span: startSpan, switch: startSwitch
+  };
+
+  function goToHub() {
+    if (activeCleanup) { activeCleanup(); activeCleanup = null; }
+    stage.innerHTML = '';
+    gameView.classList.remove('active');
+    profileView.classList.remove('active');
+    hubView.classList.add('active');
+    refreshHub();
+  }
+
+  backBtn.addEventListener('click', goToHub);
+  profileBackBtn.addEventListener('click', goToHub);
+  profileBtn.addEventListener('click', function () {
+    hubView.classList.remove('active');
+    profileView.classList.add('active');
+    renderProfile();
+  });
+
+  document.querySelectorAll('.game-row').forEach(function (row) {
+    row.addEventListener('click', function () {
+      var game = row.getAttribute('data-game');
+      hubView.classList.remove('active');
+      gameView.classList.add('active');
+      liveTitle.textContent = GAME_NAMES[game];
+      liveScore.textContent = '0';
+      activeCleanup = STARTERS[game]();
+    });
+  });
+
+  function endRound(game, score, headline, sub) {
+    if (activeCleanup) { activeCleanup(); activeCleanup = null; }
+    var best = getBest(game);
+    var newBest = isNewBest(game, score, best);
+    if (newBest) setBest(game, score);
+    var shownBest = newBest ? score : best;
+    stage.innerHTML =
+      '<div class="end-panel">' +
+        '<p class="headline">' + headline + '</p>' +
+        '<p class="sub">' + sub + (newBest ? ' New best!' : ' Best: ' + shownBest + '.') + '</p>' +
+        '<div class="end-actions">' +
+          '<button class="primary-btn" id="playAgainBtn">Play again</button>' +
+          '<button class="ghost-btn" id="toHubBtn">Back to games</button>' +
+        '</div>' +
+      '</div>';
+    document.getElementById('playAgainBtn').addEventListener('click', function () {
+      liveScore.textContent = '0';
+      activeCleanup = STARTERS[game]();
+    });
+    document.getElementById('toHubBtn').addEventListener('click', goToHub);
+  }
+
+  function startRecall() {
+    var positions = [
+      {x: 130, y: 20}, {x: 230, y: 60}, {x: 250, y: 160},
+      {x: 170, y: 220}, {x: 60, y: 190}, {x: 20, y: 90}
+    ];
+    var colors = ['gold', 'coral', 'teal', 'gold', 'coral', 'teal'];
+    var sequence = [];
+    var playerStep = 0;
+    var accepting = false;
+    var timers = [];
+
+    stage.innerHTML =
+      '<svg id="recallSvg" viewBox="0 0 270 240" style="width:100%;max-width:340px;height:auto" aria-hidden="true"></svg>' +
+      '<p class="hint" id="recallHint">Watch the sequence, then repeat it in order.</p>';
+
+    var svg = document.getElementById('recallSvg');
+    var hint = document.getElementById('recallHint');
+
+    var linesGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    svg.appendChild(linesGroup);
+    for (var i = 0; i < positions.length; i++) {
+      for (var j = i + 1; j < positions.length; j++) {
+        var ln = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        ln.setAttribute('x1', positions[i].x); ln.setAttribute('y1', positions[i].y);
+        ln.setAttribute('x2', positions[j].x); ln.setAttribute('y2', positions[j].y);
+        ln.setAttribute('stroke', 'var(--border)');
+        ln.setAttribute('stroke-width', '1');
+        linesGroup.appendChild(ln);
+      }
+    }
+
+    var nodes = positions.map(function (p, idx) {
+      var c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      c.setAttribute('cx', p.x); c.setAttribute('cy', p.y); c.setAttribute('r', 15);
+      c.setAttribute('fill', 'var(--node)');
+      c.style.cursor = 'pointer';
+      c.style.transition = 'fill 0.15s ease, r 0.15s ease';
+      c.addEventListener('click', function () { handleClick(idx); });
+      svg.appendChild(c);
+      return c;
+    });
+
+    function lightNode(idx, color, big) {
+      nodes[idx].setAttribute('fill', 'var(--' + color + ')');
+      nodes[idx].setAttribute('r', big ? 19 : 15);
+    }
+    function unlightNode(idx) {
+      nodes[idx].setAttribute('fill', 'var(--node)');
+      nodes[idx].setAttribute('r', 15);
+    }
+
+    function clearTimers() { timers.forEach(clearTimeout); timers = []; }
+
+    function playSequence() {
+      accepting = false;
+      playerStep = 0;
+      hint.textContent = 'Watch closely...';
+      sequence.forEach(function (idx, i) {
+        timers.push(setTimeout(function () {
+          lightNode(idx, colors[idx], true);
+        }, i * 700));
+        timers.push(setTimeout(function () {
+          unlightNode(idx);
+        }, i * 700 + 450));
+      });
+      timers.push(setTimeout(function () {
+        accepting = true;
+        hint.textContent = 'Your turn — repeat the sequence.';
+      }, sequence.length * 700 + 150));
+    }
+
+    function nextRound() {
+      sequence.push(Math.floor(Math.random() * positions.length));
+      playSequence();
+    }
+
+    function handleClick(idx) {
+      if (!accepting) return;
+      var expected = sequence[playerStep];
+      if (idx === expected) {
+        lightNode(idx, 'teal', false);
+        timers.push(setTimeout(function () { unlightNode(idx); }, 250));
+        playerStep++;
+        if (playerStep === sequence.length) {
+          accepting = false;
+          var roundScore = sequence.length - 3;
+          if (roundScore < 0) roundScore = 0;
+          liveScore.textContent = roundScore;
+          hint.textContent = 'Nice. Next round coming up...';
+          timers.push(setTimeout(nextRound, 900));
+        }
+      } else {
+        lightNode(idx, 'coral', false);
+        accepting = false;
+        var finalScore = sequence.length - 4;
+        if (finalScore < 0) finalScore = 0;
+        timers.push(setTimeout(function () {
+          endRound('recall', finalScore,
+            finalScore <= 0 ? 'Worth another go' : 'You cleared ' + finalScore + ' round' + (finalScore === 1 ? '' : 's'),
+            'The sequence reached length ' + sequence.length + '.');
+        }, 500));
+      }
+    }
+
+    timers.push(setTimeout(nextRound, 500));
+
+    return function cleanup() { clearTimers(); };
+  }
+
+  function startMath() {
+    var score = 0;
+    var level = 0;
+    var timers = [];
+    var rafId = null;
+    var roundActive = true;
+
+    function pickProblem() {
+      var ops = ['+', '-', '×'];
+      var op = ops[Math.floor(Math.random() * (level > 2 ? 3 : 2))];
+      var a, b, answer;
+      if (op === '+') {
+        a = randInt(2 + level, 12 + level * 2);
+        b = randInt(2 + level, 12 + level * 2);
+        answer = a + b;
+      } else if (op === '-') {
+        a = randInt(5 + level, 15 + level * 2);
+        b = randInt(1, a - 1);
+        answer = a - b;
+      } else {
+        a = randInt(2, 5 + Math.floor(level / 2));
+        b = randInt(2, 9);
+        answer = a * b;
+      }
+      return { text: a + ' ' + op + ' ' + b, answer: answer };
+    }
+    function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+
+    function distractors(answer) {
+      var set = new Set([answer]);
+      while (set.size < 3) {
+        var delta = randInt(1, 6) * (Math.random() < 0.5 ? -1 : 1);
+        var candidate = answer + delta;
+        if (candidate !== answer && candidate >= 0) set.add(candidate);
+      }
+      var arr = Array.from(set);
+      for (var i = arr.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var t = arr[i]; arr[i] = arr[j]; arr[j] = t;
+      }
+      return arr;
+    }
+
+    function renderProblem() {
+      roundActive = true;
+      var problem = pickProblem();
+      var options = distractors(problem.answer);
+      var duration = Math.max(2600, 6000 - level * 280);
+
+      stage.innerHTML =
+        '<div class="timebar-track"><div class="timebar-fill" id="mathBar"></div></div>' +
+        '<div class="prompt-math">' + problem.text + '</div>' +
+        '<div class="choice-row" id="mathChoices"></div>';
+
+      var choicesEl = document.getElementById('mathChoices');
+      options.forEach(function (opt) {
+        var btn = document.createElement('button');
+        btn.className = 'choice-btn';
+        btn.textContent = opt;
+        btn.addEventListener('click', function () { handleAnswer(opt === problem.answer, btn); });
+        choicesEl.appendChild(btn);
+      });
+
+      var bar = document.getElementById('mathBar');
+      var start = performance.now();
+      function tick(now) {
+        if (!roundActive) return;
+        var elapsed = now - start;
+        var pct = Math.max(0, 1 - elapsed / duration);
+        bar.style.width = (pct * 100) + '%';
+        if (pct <= 0) {
+          handleAnswer(false, null);
+          return;
+        }
+        rafId = requestAnimationFrame(tick);
+      }
+      rafId = requestAnimationFrame(tick);
+    }
+
+    function handleAnswer(correct, btnEl) {
+      if (!roundActive) return;
+      roundActive = false;
+      if (rafId) cancelAnimationFrame(rafId);
+      if (btnEl) btnEl.classList.add(correct ? 'correct' : 'wrong');
+      if (correct) {
+        score++;
+        level++;
+        liveScore.textContent = score;
+        timers.push(setTimeout(renderProblem, 350));
+      } else {
+        timers.push(setTimeout(function () {
+          endRound('math', score,
+            score <= 0 ? 'Worth another go' : 'Streak of ' + score,
+            score <= 0 ? 'Try to get at least one right next time.' : 'You solved ' + score + ' in a row before that one.');
+        }, 500));
+      }
+    }
+
+    timers.push(setTimeout(renderProblem, 300));
+    return function cleanup() { timers.forEach(clearTimeout); if (rafId) cancelAnimationFrame(rafId); roundActive = false; };
+  }
+
+  function startFocus() {
+    var score = 0;
+    var level = 0;
+    var timers = [];
+    var rafId = null;
+    var roundActive = true;
+    var colorDefs = [
+      { name: 'gold', label: 'Gold' },
+      { name: 'coral', label: 'Coral' },
+      { name: 'teal', label: 'Teal' },
+      { name: 'node', label: 'Ink' }
+    ];
+
+    function renderRound() {
+      roundActive = true;
+      var wordDef = colorDefs[Math.floor(Math.random() * colorDefs.length)];
+      var inkDef = colorDefs[Math.floor(Math.random() * colorDefs.length)];
+      var duration = Math.max(1800, 4200 - level * 220);
+
+      stage.innerHTML =
+        '<div class="timebar-track"><div class="timebar-fill" id="focusBar"></div></div>' +
+        '<div class="prompt-word" style="color:var(--' + inkDef.name + ')">' + wordDef.label + '</div>' +
+        '<p class="hint">Tap the colour of the letters, not the word.</p>' +
+        '<div class="swatch-row" id="focusChoices"></div>';
+
+      var choicesEl = document.getElementById('focusChoices');
+      var order = colorDefs.slice();
+      for (var i = order.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var t = order[i]; order[i] = order[j]; order[j] = t;
+      }
+      order.forEach(function (c) {
+        var btn = document.createElement('button');
+        btn.className = 'swatch-btn';
+        btn.style.background = 'var(--' + c.name + ')';
+        btn.setAttribute('aria-label', c.label);
+        btn.addEventListener('click', function () { handleAnswer(c.name === inkDef.name, btn); });
+        choicesEl.appendChild(btn);
+      });
+
+      var bar = document.getElementById('focusBar');
+      var start = performance.now();
+      function tick(now) {
+        if (!roundActive) return;
+        var elapsed = now - start;
+        var pct = Math.max(0, 1 - elapsed / duration);
+        bar.style.width = (pct * 100) + '%';
+        if (pct <= 0) { handleAnswer(false, null); return; }
+        rafId = requestAnimationFrame(tick);
+      }
+      rafId = requestAnimationFrame(tick);
+    }
+
+    function handleAnswer(correct, btnEl) {
+      if (!roundActive) return;
+      roundActive = false;
+      if (rafId) cancelAnimationFrame(rafId);
+      if (btnEl) btnEl.style.outline = correct ? '3px solid var(--teal)' : '3px solid var(--coral)';
+      if (correct) {
+        score++; level++;
+        liveScore.textContent = score;
+        timers.push(setTimeout(renderRound, 300));
+      } else {
+        timers.push(setTimeout(function () {
+          endRound('focus', score,
+            score <= 0 ? 'Worth another go' : 'Streak of ' + score,
+            score <= 0 ? 'Slow down a touch and try again.' : 'You kept focus for ' + score + ' rounds.');
+        }, 450));
+      }
+    }
+
+    timers.push(setTimeout(renderRound, 300));
+    return function cleanup() { timers.forEach(clearTimeout); if (rafId) cancelAnimationFrame(rafId); roundActive = false; };
+  }
+
+  function startReaction() {
+    var TRIALS = 5;
+    var trialIdx = 0;
+    var times = [];
+    var timers = [];
+    var waitTimer = null;
+    var stimulusShownAt = 0;
+    var state = 'idle';
+
+    function renderTrial() {
+      state = 'wait';
+      stage.innerHTML =
+        '<div class="tap-zone wait" id="tapZone">Wait for it to turn teal, then tap as fast as you can.</div>' +
+        '<p class="hint">Trial ' + (trialIdx + 1) + ' of ' + TRIALS + '</p>';
+      var zone = document.getElementById('tapZone');
+      zone.addEventListener('click', onZoneClick);
+      var delay = 1000 + Math.random() * 2200;
+      waitTimer = setTimeout(function () {
+        state = 'go';
+        stimulusShownAt = performance.now();
+        zone.className = 'tap-zone go';
+        zone.textContent = 'Tap now';
+      }, delay);
+      timers.push(waitTimer);
+    }
+
+    function onZoneClick() {
+      var zone = document.getElementById('tapZone');
+      if (state === 'wait') {
+        clearTimeout(waitTimer);
+        state = 'idle';
+        zone.className = 'tap-zone early';
+        zone.textContent = 'Too soon — wait for teal next time.';
+        timers.push(setTimeout(renderTrial, 900));
+        return;
+      }
+      if (state === 'go') {
+        var rt = Math.round(performance.now() - stimulusShownAt);
+        times.push(rt);
+        trialIdx++;
+        state = 'idle';
+        if (trialIdx < TRIALS) {
+          zone.className = 'tap-zone wait';
+          zone.textContent = rt + ' ms';
+          timers.push(setTimeout(renderTrial, 700));
+        } else {
+          var avg = Math.round(times.reduce(function (a, b) { return a + b; }, 0) / times.length);
+          liveScore.textContent = avg + ' ms avg';
+          timers.push(setTimeout(function () {
+            endRound('reaction', avg, avg + ' ms average',
+              'Across ' + TRIALS + ' trials, fastest was ' + Math.min.apply(null, times) + ' ms.');
+          }, 500));
+        }
+      }
+    }
+
+    timers.push(setTimeout(renderTrial, 300));
+    return function cleanup() { timers.forEach(clearTimeout); if (waitTimer) clearTimeout(waitTimer); };
+  }
+
+  function startSpan() {
+    var length = 3;
+    var timers = [];
+    var rafId = null;
+    var currentSequence = [];
+    var entry = [];
+    var entryLocked = false;
+
+    function renderPresenting() {
+      currentSequence = [];
+      for (var i = 0; i < length; i++) currentSequence.push(Math.floor(Math.random() * 10));
+      stage.innerHTML =
+        '<div class="entry-display filled" id="spanDigit">•</div>' +
+        '<p class="hint">Memorize the digits. You will enter them backwards.</p>';
+      var digitEl = document.getElementById('spanDigit');
+      currentSequence.forEach(function (d, i) {
+        timers.push(setTimeout(function () { digitEl.textContent = d; }, i * 900));
+        timers.push(setTimeout(function () { digitEl.textContent = '·'; }, i * 900 + 600));
+      });
+      timers.push(setTimeout(renderEntry, currentSequence.length * 900 + 200));
+    }
+
+    function renderEntry() {
+      entry = [];
+      entryLocked = false;
+      var expected = currentSequence.slice().reverse();
+      var duration = Math.min(11000, 1800 + expected.length * 700);
+
+      stage.innerHTML =
+        '<div class="timebar-track"><div class="timebar-fill" id="spanBar"></div></div>' +
+        '<div class="entry-display" id="entryDisplay"></div>' +
+        '<p class="hint">Enter the digits in reverse order before time runs out.</p>' +
+        '<div class="keypad" id="keypad"></div>';
+      var display = document.getElementById('entryDisplay');
+      var pad = document.getElementById('keypad');
+      for (var n = 0; n <= 9; n++) {
+        (function (digit) {
+          var btn = document.createElement('button');
+          btn.textContent = digit;
+          btn.addEventListener('click', function () {
+            if (entryLocked) return;
+            entry.push(digit);
+            display.textContent = entry.join(' ');
+            display.classList.add('filled');
+            if (entry.length === expected.length) {
+              checkEntry(expected);
+            }
+          });
+          pad.appendChild(btn);
+        })(n);
+      }
+      var clearBtn = document.createElement('button');
+      clearBtn.textContent = 'Clear';
+      clearBtn.style.gridColumn = 'span 3';
+      clearBtn.addEventListener('click', function () {
+        if (entryLocked) return;
+        entry = [];
+        display.textContent = '';
+        display.classList.remove('filled');
+      });
+      pad.appendChild(clearBtn);
+
+      var bar = document.getElementById('spanBar');
+      var start = performance.now();
+      function tick(now) {
+        if (entryLocked) return;
+        var pct = Math.max(0, 1 - (now - start) / duration);
+        bar.style.width = (pct * 100) + '%';
+        if (pct <= 0) {
+          checkEntry(expected, true);
+          return;
+        }
+        rafId = requestAnimationFrame(tick);
+      }
+      rafId = requestAnimationFrame(tick);
+    }
+
+    function checkEntry(expected, timedOut) {
+      if (entryLocked) return;
+      entryLocked = true;
+      if (rafId) cancelAnimationFrame(rafId);
+      var correct = !timedOut && entry.length === expected.length && entry.every(function (d, i) { return d === expected[i]; });
+      if (correct) {
+        var roundScore = length;
+        liveScore.textContent = roundScore;
+        length++;
+        timers.push(setTimeout(renderPresenting, 700));
+      } else {
+        var finalScore = length - 1;
+        if (finalScore < 3) finalScore = 0;
+        timers.push(setTimeout(function () {
+          endRound('span', finalScore,
+            finalScore <= 0 ? 'Worth another go' : finalScore + '-digit span',
+            timedOut
+              ? 'Time ran out before you finished entering. Reached ' + finalScore + ' digits.'
+              : 'You correctly reversed sequences up to ' + finalScore + ' digits long.');
+        }, 400));
+      }
+    }
+
+    timers.push(setTimeout(renderPresenting, 300));
+    return function cleanup() { timers.forEach(clearTimeout); if (rafId) cancelAnimationFrame(rafId); entryLocked = true; };
+  }
+
+  function startSwitch() {
+    var TOTAL_TRIALS = 16;
+    var trialIdx = 0;
+    var correctCount = 0;
+    var timers = [];
+    var rafId = null;
+    var roundActive = true;
+
+    var vowels = ['A', 'E', 'I', 'O', 'U'];
+    var consonants = ['B', 'D', 'F', 'G', 'K', 'M', 'P', 'R', 'S', 'T'];
+
+    function renderTrial() {
+      roundActive = true;
+      var rule = Math.random() < 0.5 ? 'letter' : 'number';
+      var letter = Math.random() < 0.5
+        ? vowels[Math.floor(Math.random() * vowels.length)]
+        : consonants[Math.floor(Math.random() * consonants.length)];
+      var number = Math.floor(Math.random() * 9) + 1;
+      var isVowel = vowels.indexOf(letter) !== -1;
+      var isOdd = number % 2 === 1;
+      var correctIsLeft = rule === 'letter' ? isVowel : isOdd;
+      var duration = 4500;
+
+      var ruleText = rule === 'letter' ? 'Is the letter a vowel?' : 'Is the number odd?';
+      var leftLabel = rule === 'letter' ? 'Vowel' : 'Odd';
+      var rightLabel = rule === 'letter' ? 'Consonant' : 'Even';
+
+      stage.innerHTML =
+        '<div class="timebar-track"><div class="timebar-fill" id="switchBar"></div></div>' +
+        '<p class="rule-banner">' + ruleText + '</p>' +
+        '<div class="switch-stimulus">' + letter + number + '</div>' +
+        '<div class="choice-row">' +
+          '<button class="choice-btn" id="leftBtn">' + leftLabel + '</button>' +
+          '<button class="choice-btn" id="rightBtn">' + rightLabel + '</button>' +
+        '</div>' +
+        '<p class="hint">Trial ' + (trialIdx + 1) + ' of ' + TOTAL_TRIALS + '</p>';
+
+      document.getElementById('leftBtn').addEventListener('click', function () { handleChoice(true, correctIsLeft); });
+      document.getElementById('rightBtn').addEventListener('click', function () { handleChoice(false, correctIsLeft); });
+
+      var bar = document.getElementById('switchBar');
+      var start = performance.now();
+      function tick(now) {
+        if (!roundActive) return;
+        var pct = Math.max(0, 1 - (now - start) / duration);
+        bar.style.width = (pct * 100) + '%';
+        if (pct <= 0) { handleChoice(null, correctIsLeft); return; }
+        rafId = requestAnimationFrame(tick);
+      }
+      rafId = requestAnimationFrame(tick);
+    }
+
+    function handleChoice(pickedLeft, correctIsLeft) {
+      if (!roundActive) return;
+      roundActive = false;
+      if (rafId) cancelAnimationFrame(rafId);
+      var correct = pickedLeft === correctIsLeft;
+      if (correct) correctCount++;
+      trialIdx++;
+      liveScore.textContent = correctCount + '/' + trialIdx;
+      if (trialIdx < TOTAL_TRIALS) {
+        timers.push(setTimeout(renderTrial, 350));
+      } else {
+        var accuracy = Math.round((correctCount / TOTAL_TRIALS) * 100);
+        timers.push(setTimeout(function () {
+          endRound('switch', accuracy, accuracy + '% accuracy',
+            'You got ' + correctCount + ' of ' + TOTAL_TRIALS + ' right while the rule kept changing.');
+        }, 400));
+      }
+    }
+
+    timers.push(setTimeout(renderTrial, 300));
+    return function cleanup() { timers.forEach(clearTimeout); if (rafId) cancelAnimationFrame(rafId); roundActive = false; };
+  }
+
+  refreshHub();
+})();
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  });
+}
+</script>
+</body>
+</html>
